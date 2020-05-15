@@ -1,7 +1,12 @@
 import {InitOptions, Model as OriginModel, ModelAttributes, FindOptions, BuildOptions, Promise} from 'sequelize';
+import {capitalize} from '../../shared/string';
 import {inferAlias} from '../../associations/alias-inference/alias-inference-service';
 import {ModelNotInitializedError} from '../shared/model-not-initialized-error';
 import {getAllPropertyNames} from '../../shared/object';
+import {AssociationGetOptions} from "./association/association-get-options";
+import {AssociationCountOptions} from "./association/association-count-options";
+import {AssociationActionOptions} from "./association/association-action-options";
+import {AssociationCreateOptions} from "./association/association-create-options";
 
 export type ModelType = typeof Model;
 export type ModelCtor<M extends Model = Model> = (new () => M) & ModelType;
@@ -33,6 +38,56 @@ export abstract class Model<T = any, T2 = any> extends OriginModel<T, T2> {
       );
     }
     super(values, inferAlias(options, new.target));
+  }
+
+  /**
+   * Adds relation between specified instances and source instance
+   */
+  $add<R extends Model<R>>(propertyKey: string, instances: R | R[] | string[] | string | number[] | number, options?: AssociationActionOptions): Promise<unknown> {
+    return this['add' + capitalize(propertyKey)](instances, options);
+  }
+
+  /**
+   * Sets relation between specified instances and source instance
+   * (replaces old relations)
+   */
+  $set<R extends Model<R>>(propertyKey: keyof this, instances: R | R[] | string[] | string | number[] | number, options?: AssociationActionOptions): Promise<unknown> {
+    return this['set' + capitalize(propertyKey as string)](instances, options);
+  }
+
+  /**
+   * Returns related instance (specified by propertyKey) of source instance
+   */
+  $get<K extends keyof this>(propertyKey: K, options?: AssociationGetOptions): Promise<$GetType<this[K]>> {
+    return this['get' + capitalize(propertyKey as string)](options);
+  }
+
+  /**
+   * Counts related instances (specified by propertyKey) of source instance
+   */
+  $count<R extends Model<R>>(propertyKey: string, options?: AssociationCountOptions): Promise<number> {
+    return this['count' + capitalize(propertyKey)](options);
+  }
+
+  /**
+   * Creates instances and relate them to source instance
+   */
+  $create<R extends Model<R>>(propertyKey: string, values: any, options?: AssociationCreateOptions): Promise<R> {
+    return this['create' + capitalize(propertyKey)](values, options);
+  }
+
+  /**
+   * Checks if specified instances is related to source instance
+   */
+  $has<R extends Model<R>>(propertyKey: string, instances: R | R[] | string[] | string | number[] | number, options?: AssociationGetOptions): Promise<boolean> {
+    return this['has' + capitalize(propertyKey)](instances, options);
+  }
+
+  /**
+   * Removes specified instances from source instance
+   */
+  $remove<R extends Model<R>>(propertyKey: string, instances: R | R[] | string[] | string | number[] | number, options?: any): Promise<any> {
+    return this['remove' + capitalize(propertyKey)](instances, options);
   }
 
   reload(options?: FindOptions): Promise<this> {
