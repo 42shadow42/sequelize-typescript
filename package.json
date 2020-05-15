@@ -1,5 +1,5 @@
 {
-  "name": "sequelize-typescript",
+  "name": "@42shadow42/sequelize-typescript",
   "version": "1.1.0-beta.0",
   "description": "Decorators and some other features for sequelize",
   "scripts": {
@@ -52,7 +52,7 @@
     "chai-as-promised": "6.0.0",
     "chai-datetime": "1.4.1",
     "codecov": "3.6.5",
-    "copyfiles": "2.1.0",
+    "copyfiles": "2.2.0",
     "has-flag": "2.0.0",
     "lodash": "4.17.13",
     "mocha": "5.2.0",
@@ -65,7 +65,6 @@
     "sinon": "1.17.7",
     "sinon-chai": "2.8.0",
     "source-map-support": "0.4.14",
-    "sqlite3": "4.0.4",
     "ts-node": "7.0.1",
     "tslint": "5.14.0",
     "typescript": "3.3.3",
